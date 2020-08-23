@@ -1,0 +1,162 @@
+# Note: This how-to document is specifically for installing NEMS coupling App on the Hatteras cluster of the Renaissance Computing Institute at UNC (RENCI)
+
+hatteras is used for - <COMPUTER>
+renci is used for - <COMPUTING system>
+intel is used as - <COMPILER>
+ROOTDIR  - is the directory of your choice in hatteras where you clone the NEMS in. 
+
+After log in to ht3.renci.org:
+sinteractive 
+(! requests a node first to install prerequisites and build NEMS app; do not do this on the log-in node)
+
+Prerequisites: 
+1) Install ESMF (Earth System Modeling Framework) library (8.0.1) (note: with the same environment as listed in modulefiles/hatteras/ESMF_NUOPC) --see TABLE 0 for setting up required environment parameters.
+2) Install NEMSIO (https://github.com/jswhit/ncep_nemsio)
+3) Install szip-2.1
+
+
+cd ROOTDIR
+1) git clone --recursive https://github.com/moghimis/ADC-WW3-NWM-NEMS
+2) mkdir -p modulefiles/hatteras
+3) cp modulefiles/hera/ESMF_NUOPC  modulefiles/hatteras/ESMF_NUOPC 
+     -- see TABLE 1 for ESMF_NUOPC on hatteras 
+4) cp conf/configure.nems.hera.intel  conf/configure.nems.hatteras.intel
+                       -- see TABLE 2 for configure.nems.hatteras.intel
+           ! note require changes of NEMSIO_INC and NEMSIO_LIB accordingly 
+           ! NEMSIO_INC: point to the location of the all the nems_*.mod file;
+           ! NEMSIO_LIB: point to the location of libnemsio.a
+5) mkdir -p NEMS/src/incmake/env/renci                                      -- if it doesn't exist
+6) cp NEMS/src/incmake/env/rdhpcs/hera.intel.mk  NEMS/src/incmake/env/renci/hatteras.intel.mk                                                            -- see TABLE 3A (changed machine name to hatteras)
+7) cp NEMS/src/incmake/env/uname/deteck.mk  NEMS/src/incmake/env/renci/deteck.mk 
+                                         -- see TABLE 3B for modifications in deteck.mk;  
+! suggestion for changes on other system: replace croatan with whatever node/computing name you have in the output of “uname -a”
+
+8) vi NEMS/src/incmake/buildenv.mk  
+   include $(call locate_incmake_file,env/renci/detect.mk)    -- add this line above the line below
+   include $(call locate_incmake_file,env/uname/detect.mk)         -- this line must remain as the last in line
+
+9) set the following environment parameters:
+export ESMFMKFILE=/path/to/yourESMFinstallation/lib/subdir/esmf.mk
+export SZIPHOME=/path/to/yourlocal/szip/2.1/lib
+export LIBDIR=/rootdir/to/nemsio     -- see conf/configure.nems.hatteras.intel
+export METIS_PATH=/path/to/parmetis
+export ROOTDIR=/path/to/ADC-WW3-NWM-NEMS
+
+10) ./build.sh
+  
+
+======================= TABLE 0 ======================
+export ESMF_DIR=/path/to/esmf-ESMF_8_0_1
+export ESMF_BOPT=g
+export ESMF_COMM=openmpi
+export ESMF_COMPILER=intel
+export ESMF_ABI=64
+export ESMF_OS=Linux
+export ESMF_INSTALL_PREFIX=/path/to/your/esmf-installation
+export ESMF_MPIRUN=mpirun.srun
+export ESMF_F90COMPILER=mpifort
+export ESMF_F90LINKER=/usr/share/Modules/software/CentOS-7/openmpi/intel/3.0.0/bin/mpifort
+export ESMF_OPENMP=ON
+export ESMF_LAPACK=internal
+export ESMF_NETCDF=split
+export ESMF_NETCDF_INCLUDE=/usr/share/Modules/software/CentOS-7/netcdf-Fortran/4.4.0_intel-18.0.0/include
+export ESMF_NETCDF_LIBPATH=/usr/share/Modules/software/CentOS-7/netcdf-Fortran/4.4.0_intel-18.0.0/lib
+export ZLIB=/usr/share/Modules/software/CentOS-7/zlib/1.2.11_intel-18.0
+
+======================= TABLE 1 ======================
+#Module######################################################################
+
+# This script is responsible for loading modules that are compatible with
+# the NUOPC Layer version used in NEMS.
+
+
+# On RENCI/Hatteras:
+module load intelc/18.0.0
+module load intelfort/18.0.0
+module load hdf5/1.10.1_intel-18.0.0
+module load openmpi/intel_3.0.0
+module load netcdf-Fortran/4.4.0_intel-18.0.0
+
+======================= TABLE 2 ======================
+## NEMS configuration file
+## --- Copy From: ---
+## Platform: Hera
+## Compiler: Intel with IntelMPI
+## --- Modify to establish onto:---
+## Platform: Hatteras (here)
+## Compiler: Intel with openmpi
+
+SHELL           = /bin/sh
+
+################################################################################
+## Include the common configuration parts
+include         $(TOP)/conf/configure.nems.NUOPC
+
+################################################################################
+## Other settings
+
+NETCDF_INC   = -I$(NETCDF)/include
+NETCDF_LIB   = -L$(NETCDF)/lib -lnetcdff -lnetcdf
+
+NEMSIO_INC   = -I${LIBDIR}/ncep_nemsio/incmod
+NEMSIO_LIB   = -L${LIBDIR}/ncep_nemsio -lnemsio
+SYS_LIB      =
+
+EXTLIBS      = $(NEMSIO_LIB) \
+               $(NETCDF_LIB) \
+               $(ESMF_LIB)   \
+               $(SYS_LIB) -lm
+
+EXTLIBS_POST = $(NEMSIO_LIB)  \
+               $(ESMF_LIB)    \
+               $(NETCDF_LIB)  \
+               $(SYS_LIB)
+###
+FC          = mpifort -g -qopenmp -mkl=sequential -align array32byte -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lpthread -qopenmp -convert big_endian -assume byterecl -mkl=sequential
+F77         = mpifort -g -qopenmp -mkl=sequential -align array32byte -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lpthread -qopenmp -convert big_endian -assume byterecl -mkl=sequential
+FREE         = -free
+FIXED        = -fixed
+R8           = -r8
+
+FINCS        = $(ESMF_INC) $(NEMSIO_INC) $(NETCDF_INC)
+TRAPS        = -O0 -g -fno-inline -no-ip -traceback -ftrapuv -fpe0 -ftz -check all -check noarg_temp_created -fp-stack-check
+
+FFLAGS       = $(TRAPS) $(FINCS) -fp-model strict
+
+OPTS_NMM     = -g -fno-inline -no-ip -traceback -ftrapuv -fpe0 -ftz -check all -check noarg_temp_created -fp-stack-check $(FREE)
+
+FFLAGM_DEBUG =
+
+FFLAGS_NMM   = $(MACROS_NWM) $(OPTS_NMM) $(FFLAGS)
+
+FPP          = -fpp
+CPP          = cpp -P -traditional
+CPPFLAGS     = -DENABLE_SMP -DCHNK_RRTM=8
+
+AR           = ar
+ARFLAGS      = -r
+
+RM           = rm
+
+
+======================= TABLE 3A ======================
+MACHINE_ID=hatteras
+FULL_MACHINE_ID=hatteras
+USE_MODULES=YES
+DEFAULT_MODULE=$(FULL_MACHINE_ID)/ESMF_NUOPC
+BUILD_TARGET=$(FULL_MACHINE_ID).$(NEMS_COMPILER)
+NEMS_COMPILER=intel
+MODULE_LOGIC=$(call ULIMIT_MODULE_LOGIC,200000)
+
+======================= TABLE 3B ======================
+verride uname_a=$(shell uname -a)
+
+ifeq (,$(findstring croatan,$(uname_a)))
+  NEMS_COMPILER?=intel
+  $(call add_build_env, hatteras.$(NEMS_COMPILER),env/renci/hatteras.$(NEMS_COMPILER).mk)
+endif
+
+
+
+
+
