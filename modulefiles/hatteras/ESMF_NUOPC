@@ -1,0 +1,20 @@
+#%Module######################################################################
+
+# This script is responsible for loading modules that are compatible with
+# the NUOPC Layer version used in NEMS.
+
+
+# On RENCI/Hatteras:
+module load intelc/18.0.0
+module load intelfort/18.0.0
+module load hdf5/1.10.1_intel-18.0.0
+module load openmpi/intel_3.0.0
+module load netcdf-Fortran/4.4.0_intel-18.0.0
+
+
+# Environment for ESMF v8.0.0 beta snapshot 48g
+#module use /home/emc.nemspara/SOFT-hera/modulefiles
+#module load esmf/8.0.0bs48g
+#
+
+#
