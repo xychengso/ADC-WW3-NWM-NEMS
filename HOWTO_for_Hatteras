@@ -27,8 +27,8 @@ cd ROOTDIR
            ! NEMSIO_LIB: point to the location of libnemsio.a
 5) mkdir -p NEMS/src/incmake/env/renci                                      -- if it doesn't exist
 6) cp NEMS/src/incmake/env/rdhpcs/hera.intel.mk  NEMS/src/incmake/env/renci/hatteras.intel.mk                                                            -- see TABLE 3A (changed machine name to hatteras)
-7) cp NEMS/src/incmake/env/uname/deteck.mk  NEMS/src/incmake/env/renci/deteck.mk 
-                                         -- see TABLE 3B for modifications in deteck.mk;  
+7) cp NEMS/src/incmake/env/uname/detect.mk  NEMS/src/incmake/env/renci/detect.mk 
+                                         -- see TABLE 3B for modifications in detect.mk;  
 ! suggestion for changes on other system: replace croatan with whatever node/computing name you have in the output of “uname -a”
 
 8) vi NEMS/src/incmake/buildenv.mk  
@@ -42,7 +42,14 @@ export LIBDIR=/rootdir/to/nemsio     -- see conf/configure.nems.hatteras.intel
 export METIS_PATH=/path/to/parmetis
 export ROOTDIR=/path/to/ADC-WW3-NWM-NEMS
 
-10) ./build.sh
+10) vi WW3/model/esmf/Makefile; make changes to WW3_COMP, WW3_CC, and WW3_F90 accordingly.
+   WW3_COMP ?= intel
+   WW3_CC := cc
+   WW3_F90 := ifort
+   add "hatteras" at the end of line#38 after "theia" "Intel"
+
+11) in build.sh, modify line23 according to the computer you use. (hera --> hatteras)
+12) ./build.sh
   
 
 ======================= TABLE 0 ======================

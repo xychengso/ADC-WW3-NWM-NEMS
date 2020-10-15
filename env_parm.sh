@@ -2,6 +2,7 @@
 export LIBDIR=/projects/ees/dhs-crc/xychen
 export METIS_PATH=/home/xychen/localmodules/parmetis
 export ROOTDIR=/home/xychen/ADC-WW3-NWM-NEMS
+#export ROOTDIR=/projects/ees/dhs-crc/xychen/ADC-WW3-NWM-NEMS
 #export ESMFMKFILE=/projects/ees/dhs-crc/xychen/ESMFlib/lib/libg/Linux.intel.64.mvapich2.default/esmf.mk
 #export ESMFMKFILE=/projects/ees/dhs-crc/xychen/esmf-ESMF_8_0_0/install/lib/libg/Linux.intel.64.mvapich2.default/esmf.mk
 export ESMFMKFILE=/projects/ees/dhs-crc/xychen/ESMFlib_openmpi/lib/libg/Linux.intel.64.openmpi.default/esmf.mk

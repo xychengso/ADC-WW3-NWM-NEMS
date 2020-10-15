@@ -20,7 +20,8 @@ else
 fi
 
 # Load modules
-source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/hatteras/ESMF_NUOPC
 module list
 
 echo "Building NEMS app in ${ROOTDIR}/NEMS"
@@ -30,14 +31,15 @@ cd ${ROOTDIR}/NEMS
 make -f GNUmakefile distclean_ADCIRC COMPONENTS="ADCIRC"
 make -f GNUmakefile distclean_WW3DATA COMPONENTS="WW3DATA"
 make -f GNUmakefile distclean_ATMESH COMPONENTS="ATMESH"
-make -f GNUmakefile distclean_WW3 COMPONENTS="WW3"
-make -f GNUmakefile distclean_NWM COMPONENTS="NWM"
-make -f GNUmakefile distclean_NEMS COMPONENTS="ADCIRC WW3 NWM ATMESH"
+#make -f GNUmakefile distclean_WW3 COMPONENTS="WW3"
+#make -f GNUmakefile distclean_NWM COMPONENTS="NWM"
+## clean up NEMS whenever a different component is added and need to rebuild NEMS;
+make -f GNUmakefile distclean_NEMS COMPONENTS="ADCIRC WW3DATA NWM ATMESH"
 
 # Make coupled NEMS app
 #make -f GNUmakefile build COMPONENTS="ADCIRC NWM ATMESH"
 #make -f GNUmakefile build COMPONENTS="ADCIRC WW3 ATMESH"
 #make -f GNUmakefile build COMPONENTS="ADCIRC ATMESH WW3 NWM"
-#make -f GNUmakefile build COMPONENTS="ADCIRC WW3DATA ATMESH"
+make -f GNUmakefile build COMPONENTS="ADCIRC WW3DATA ATMESH"
 #make -f GNUmakefile build COMPONENTS="ADCIRC ATMESH  NWM"
-make -f GNUmakefile build COMPONENTS="ADCIRC WW3DATA ATMESH NWM"
+#make -f GNUmakefile build COMPONENTS="ADCIRC WW3DATA ATMESH NWM"
