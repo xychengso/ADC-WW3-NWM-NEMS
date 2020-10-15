@@ -28,13 +28,13 @@ echo "Building NEMS app in ${ROOTDIR}/NEMS"
 cd ${ROOTDIR}/NEMS
 
 # Clean up
-make -f GNUmakefile distclean_ADCIRC COMPONENTS="ADCIRC"
+#make -f GNUmakefile distclean_ADCIRC COMPONENTS="ADCIRC"
 make -f GNUmakefile distclean_WW3DATA COMPONENTS="WW3DATA"
-make -f GNUmakefile distclean_ATMESH COMPONENTS="ATMESH"
+#make -f GNUmakefile distclean_ATMESH COMPONENTS="ATMESH"
 #make -f GNUmakefile distclean_WW3 COMPONENTS="WW3"
 #make -f GNUmakefile distclean_NWM COMPONENTS="NWM"
 ## clean up NEMS whenever a different component is added and need to rebuild NEMS;
-make -f GNUmakefile distclean_NEMS COMPONENTS="ADCIRC WW3DATA NWM ATMESH"
+make -f GNUmakefile distclean_NEMS COMPONENTS="ADCIRC WW3 NWM ATMESH"
 
 # Make coupled NEMS app
 #make -f GNUmakefile build COMPONENTS="ADCIRC NWM ATMESH"
