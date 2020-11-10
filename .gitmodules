@@ -1,6 +1,6 @@
 [submodule "ATMESH"]
 	path = ATMESH
-  	url = https://github.com/xychengso/ATMESH
+  	url = https://github.com/xychengso/ADC-WW3-Coupling-Dev/tree/main/SrcCode/ATMESH
 	branch = master
 [submodule "WW3DATA"]
 	path = WW3DATA
