@@ -4,7 +4,7 @@
 	branch = master
 [submodule "WW3DATA"]
 	path = WW3DATA
-	url = https://github.com/xychengso/WW3DATA
+	url = https://github.com/moghimis/WW3DATA
 	branch = master
 [submodule "WW3"]
 	path = WW3
