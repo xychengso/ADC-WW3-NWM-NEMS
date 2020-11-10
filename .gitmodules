@@ -1,10 +1,10 @@
 [submodule "ATMESH"]
 	path = ATMESH
-  	url = https://github.com/moghimis/ATMESH
+  	url = https://github.com/xychengso/ATMESH
 	branch = master
 [submodule "WW3DATA"]
 	path = WW3DATA
-	url = https://github.com/moghimis/WW3DATA
+	url = https://github.com/xychengso/WW3DATA
 	branch = master
 [submodule "WW3"]
 	path = WW3
