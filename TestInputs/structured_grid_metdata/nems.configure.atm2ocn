@@ -1,0 +1,32 @@
+#############################################
+####  NEMS Run-Time Configuration File  #####
+#############################################
+
+# EARTH #
+EARTH_component_list: ATM OCN
+EARTH_attributes::
+  Verbosity = max
+::
+
+# ATM #
+ATM_model:                      atmesh
+ATM_petlist_bounds:             15 15
+ATM_attributes::
+  Verbosity = max
+::
+
+# OCN #
+OCN_model:                      adcirc
+OCN_petlist_bounds:             0 14
+OCN_attributes::
+  Verbosity = max
+::
+
+# Run Sequence #
+runSeq::
+  @3600
+    ATM -> OCN   :remapMethod=bilinear
+    ATM
+    OCN
+  @
+::

@@ -1,0 +1,3 @@
+ atm_dir: /projects/ees/dhs-crc/xychen/NCEP-CPL-ADC-WW3/test_ssdWindStress/input/realww3/windforcing
+ atm_nam: IDLHur_BaseCase_OpenOcn.nc
+ atm_grd: structured
